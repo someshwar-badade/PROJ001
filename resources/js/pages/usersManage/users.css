@@ -1,0 +1,24 @@
+.user-table-th-row th{
+    background-color: cadetblue;
+    text-align: center;
+    padding: 6px;
+}
+
+.user-table-td-row td{
+    /* background-color: rgba(109, 112, 113, 0.544); */
+    text-align: center;
+    padding: 6px;
+   
+}
+
+.user-table-td-row:nth-child(even) td{
+    background-color: rgba(109, 112, 113, 0.544);
+    text-align: center;
+    padding: 6px;
+    /* border-right: 2px solid white; */
+}
+
+.users-main-div{
+    height: 60vh;
+    overflow: auto ;
+}

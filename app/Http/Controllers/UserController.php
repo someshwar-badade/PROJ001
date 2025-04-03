@@ -16,9 +16,14 @@ class UserController extends Controller
 {
     public function users(Request $request)
     {    
-        $query = User::query();
-       $users = User::with('phoneNumbers')->paginate(10)->onEachSide(1);
-
+    //     $query = User::query();
+    //    $users = User::with('phoneNumbers')->paginate(10)->onEachSide(1);
+        // $users = User::with('phoneNumbers')->get();
+        $users = User::query()
+        ->select('id', 'name', 'email')
+        ->with('phoneNumbers') 
+        ->paginate(10)
+        ->withQueryString(); // Keeps the pagination query params
     //    dd($users);
         return Inertia::render('usersManage/users', [
             'users' => $users, 

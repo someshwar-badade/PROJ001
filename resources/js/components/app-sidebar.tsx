@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { Building,User2, BookOpen, Folder, LayoutGrid, Users } from 'lucide-react';
+import { Building,User2, Images, ShieldPlus, LayoutGrid, Users } from 'lucide-react';
 
 import AppLogo from './app-logo';
 
@@ -32,12 +32,12 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Permissions',
         href: '/permissions',
-        icon: User2,
+        icon: ShieldPlus,
     },
     {
         title: 'Jobs',
         href: '/company-jobs',
-        icon: User2,
+        icon: Images,
     },
 ];
 

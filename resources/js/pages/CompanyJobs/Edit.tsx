@@ -3,6 +3,7 @@ import CompanyJobsLayout from './CompanyJobsLayout';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 type Props = {
     job: {
         id: number;
@@ -45,7 +46,7 @@ export default function Edit({ job }: Props) {
                 </div>
                 <div>
                     <Label>Description</Label>
-                    <Input value={data.description} onChange={(e) => setData('description', e.target.value)} required />
+                    <Textarea value={data.description} onChange={(e) => setData('description', e.target.value)} required />
                 </div>
              
             <Button type="submit" disabled={processing}>Update</Button>

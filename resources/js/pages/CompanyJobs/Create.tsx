@@ -3,6 +3,7 @@ import CompanyJobsLayout from './CompanyJobsLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function Create() {
     const { data, setData, post, processing } = useForm({
@@ -23,7 +24,7 @@ export default function Create() {
         <form onSubmit={submit} className="space-y-6">
                 <div>
                     <Label>Job Name</Label>
-                    <Input value={data.company_id} onChange={(e) => setData('job_name', e.target.value)} required />
+                    <Input value={data.job_name} onChange={(e) => setData('job_name', e.target.value)} required />
                 </div>
                 <div>
                     <Label>dimensions</Label>
@@ -35,7 +36,8 @@ export default function Create() {
                 </div>
                 <div>
                     <Label>Description</Label>
-                    <Input value={data.description} onChange={(e) => setData('description', e.target.value)} required />
+                    <Textarea placeholder="Type your message here." value={data.description} onChange={(e) => setData('description', e.target.value)} required />
+                    
                 </div>
               <input type="file" multiple onChange={(e) => setData('images', e.target.files ? Array.from(e.target.files) : [])} />
             <Button type="submit" disabled={processing}>Create</Button>

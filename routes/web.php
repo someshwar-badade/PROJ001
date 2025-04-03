@@ -3,6 +3,7 @@
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\CompanyJobController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -44,6 +45,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/permissions/{permission}/edit', [PermissionController::class, 'edit'])->name('permissions.edit');
     Route::put('/permissions/{permission}', [PermissionController::class, 'update'])->name('permissions.update');
     Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
+});
+
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/company-jobs', [CompanyJobController::class, 'index'])->name('company_jobs.index');
+    Route::get('/company-jobs/create', [CompanyJobController::class, 'create'])->name('company_jobs.create');
+    Route::post('/company-jobs', [CompanyJobController::class, 'store'])->name('company_jobs.store');
+    Route::get('/company-jobs/{companyJob}', [CompanyJobController::class, 'show'])->name('company_jobs.show');
+    Route::get('/company-jobs/{companyJob}/edit', [CompanyJobController::class, 'edit'])->name('company_jobs.edit');
+    Route::put('/company-jobs/{companyJob}', [CompanyJobController::class, 'update'])->name('company_jobs.update');
+    Route::delete('/company-jobs/{companyJob}', [CompanyJobController::class, 'destroy'])->name('company_jobs.destroy');
 });
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

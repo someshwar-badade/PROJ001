@@ -28,6 +28,11 @@ const mainNavItems: NavItem[] = [
         href: '/permissions',
         icon: User2,
     },
+    {
+        title: 'Jobs',
+        href: '/company-jobs',
+        icon: User2,
+    },
 ];
 
 const footerNavItems: NavItem[] = [];

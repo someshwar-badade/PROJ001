@@ -17,8 +17,10 @@ import { useEffect, useState } from 'react';
 import DeleteUserModal from './deleteUser';
 import EditUserForm from './editUserForm';
 import AddUserForm from './userForm';
-import './users.css';
+// import './users.css';
 import UsersPaginate from './usersPaginate';
+import { getColumns, User } from '@/components/data-table-components/Columns';
+import { DataTable } from '@/components/data-table-components/Data-table';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -28,19 +30,20 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 interface PaginatedUsers {
-    data: Array<{
-        id: number;
-        name: string;
-        email: string;
-        phone_numbers?: { phone_number: string }[];
-    }>;
-    links: Array<{ url: string | null; label: string; active: boolean }>;
-    meta: {
-        current_page: number;
-        last_page: number;
-        per_page: number;
-        total: number;
-    };
+    data: User[];
+    // data: Array<{
+    //     id: number;
+    //     name: string;
+    //     email: string;
+    //     mobile?: { mobile: string }[];
+    // }>;
+    // links: Array<{ url: string | null; label: string; active: boolean }>;
+    // meta: {
+    //     current_page: number;
+    //     last_page: number;
+    //     per_page: number;
+    //     total: number;
+    // };
 }
 
 export default function users() {
@@ -50,9 +53,10 @@ export default function users() {
 
     const [users, setUsers] = useState<PaginatedUsers>({
         data: [],
-        links: [],
-        meta: { current_page: 1, last_page: 1, per_page: 10, total: 0 },
-    });
+        // data: [],
+        // links: [],
+        // meta: { current_page: 1, last_page: 1, per_page: 10, total: 0 },
+});
 
     // Function to reload users after form submission
     const fetchUsers = (messageString: string) => {
@@ -65,23 +69,30 @@ export default function users() {
     };
 
     useEffect(() => {
-        if (props.users && typeof props.users === 'object' && 'data' in props.users) {
-            const newUsers = props.users as PaginatedUsers;
+        if (props.users && typeof props.users === 'object') {
+            const newUsers = props.users  as PaginatedUsers;
             setUsers({
                 data: Array.isArray(newUsers.data) ? newUsers.data : [],
-                links: Array.isArray(newUsers.links) ? newUsers.links : [],
-                meta:
-                    typeof newUsers.meta === 'object'
-                        ? newUsers.meta
-                        : {
-                              current_page: 1,
-                              last_page: 1,
-                              per_page: 10,
-                              total: 0,
-                          },
+
+                // data: Array.isArray(newUsers) ? newUsers : [],
+                // links: Array.isArray(newUsers.links) ? newUsers.links : [],
+                // meta:
+                //     typeof newUsers.meta === 'object'
+                //         ? newUsers.meta
+                //         : {
+                //               current_page: 1,
+                //               last_page: 1,
+                //               per_page: 10,
+                //               total: 0,
+                //           },
             });
         }
     }, [props.users]);
+
+    function getData(): User[] {
+        console.log(users.data)
+        return users.data;
+    }
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -127,87 +138,17 @@ export default function users() {
                     </div>
                 </div>
                 {/* Users Table */}
-                <div className="table-div border-sidebar-border/70 dark:border-sidebar-border relative flex-1 rounded-xl border p-2 md:min-h-min">
-                    <table className="w-full table-auto border-collapse">
-                        <thead>
-                            <tr className="user-table-th-row">
-                                <th className="border-b p-3">Sr.No.</th>
-                                <th className="border-b p-3">Name</th>
-                                <th className="border-b p-3">Email</th>
-                                <th className="border-b p-3">Mobile No.</th>
-                                <th className="border-b p-3">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {users.data.length > 0 ? (
-                                users.data.map(
-                                    (
-                                        user: { id: number; name: string; email: string; phone_numbers?: { phone_number: string }[] },
-                                        index: number,
-                                    ) => (
-                                        <tr key={index} className="user-table-td-row">
-                                            <td className="border-b p-3 text-center">{index + 1}</td>
-                                            <td className="border-b p-3 text-center">{user.name}</td>
-                                            <td className="border-b p-3 text-center">{user.email}</td>
-                                            <td className="border-b p-3 text-center">
-                                                {user.phone_numbers?.length
-                                                    ? user.phone_numbers.map((mobile) => mobile.phone_number).join(', ')
-                                                    : 'N/A'}
-                                            </td>
-                                            <td className="border-b p-3">
-                                                <Dialog>
-                                                    <DialogTrigger asChild>
-                                                        <Button className="m-2" size="sm" variant="warning">
-                                                            <UserRoundPen />
-                                                        </Button>
-                                                    </DialogTrigger>
-                                                    <DialogPortal>
-                                                        <DialogOverlay className="fixed inset-0 z-50 bg-black/10 backdrop-blur-sm" />
-                                                        <DialogContent className="fixed inset-0 z-50 mx-auto mt-4 flex h-[90vh] max-w-2xl flex-col items-center justify-center rounded-lg bg-white p-6 dark:bg-gray-900">
-                                                            <DialogTitle className="mt-2 text-2xl font-bold">Edit User</DialogTitle>
-                                                            <DialogDescription className="mt-2 text-gray-600 dark:text-gray-400">
-                                                                Update user details below.
-                                                            </DialogDescription>
+                <div className="p-2 ">
+                   
+                <DataTable 
+                    columns={getColumns(() => fetchUsers, message)} 
+                    data={getData()} 
+                    />
+                    
+                
+                   
 
-                                                            {/* User Form */}
-                                                            <div className="mt-2 w-full max-w-2xl">
-                                                                {message ? <p className="m-2 p-3 dark:bg-green-900">{message}</p> : ''}
-
-                                                                <EditUserForm onFormSubmit={fetchUsers} userId={user.id} />
-                                                            </div>
-
-                                                            {/* Close Button */}
-                                                            <DialogClose asChild>
-                                                                <Button variant="outline" className="mt-4">
-                                                                    Cancel
-                                                                </Button>
-                                                            </DialogClose>
-                                                        </DialogContent>
-                                                    </DialogPortal>
-                                                </Dialog>
-                                                {/* {Delete modal component} */}
-                                                <DeleteUserModal
-                                                    userId={user.id}
-                                                    userName={user.name}
-                                                    onDeleteSuccess={() => {
-                                                      router.reload({ only: ["users"] }); 
-                                                  }}
-                                                 />
-                                            </td>
-                                        </tr>
-                                    ),
-                                )
-                            ) : (
-                                <tr>
-                                    <td colSpan={3} className="p-3 text-center text-gray-500">
-                                        No users found.
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-
-                    <UsersPaginate links={users.links} />
+                    {/* <UsersPaginate links={users.links} /> */}
                 </div>
             </div>
         </AppLayout>

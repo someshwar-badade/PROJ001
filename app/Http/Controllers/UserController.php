@@ -66,6 +66,7 @@ class UserController extends Controller
             $user = User::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
+                'company_id' => $validated['company_id'],
                 'password' => Hash::make($validated['password']),
             ]);
 
@@ -84,22 +85,24 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'User added successfully');
     }
 
-    public function editUser($userId) {
-        $user = User::find($userId);
-    
-        if (!$user) {
-            return Inertia::back()->with('error', 'User not found');
-        }
-    
-        $mobileNumbers = PhoneNumber::where('user_id', $user->id)->get();
-    
-        $user->setAttribute('mobile', $mobileNumbers);
-    
-    return response()->json([ 'user' => $user,  
-    'mobile' => $mobileNumbers, 
-    ]);
+    public function editUser($userId)
+{
+    $user = User::with(['roles:id,name', 'companies:id,name']) // eager load
+                ->find($userId);
 
+    if (!$user) {
+        return response()->json(['error' => 'User not found'], 404);
     }
+
+    $mobileNumbers = PhoneNumber::where('user_id', $user->id)->get();
+
+    $user->setAttribute('mobile', $mobileNumbers);
+
+    return response()->json([
+        'user' => $user,
+        'mobile' => $mobileNumbers,
+    ]);
+}
     
     public function updateUser(Request $request)
     {
@@ -118,6 +121,9 @@ class UserController extends Controller
                 },
             ],
             'mobile' => 'nullable|digits:10|unique:phone_numbers,phone_number,' . $request->id . ',user_id',
+            'role_id' => 'required|array|min:1', // Multiple roles required
+            'role_id.*' => 'exists:roles,id', // Each role must exist in roles table
+            'company_id' => 'required|exists:companies,id', // Company must exist
         ]);
  
         $user = User::find($request->id);
@@ -135,7 +141,13 @@ class UserController extends Controller
             $user->password = Hash::make($request->password);
         }
     
+        $user->roles()->sync($validated['role_id']);
+        $user->companies()->sync($validated['company_id']);
+
+        // If single company (belongsTo):
+        $user->company_id = $validated['company_id'];
         $user->save();
+
 
         if (!empty($request->mobile)) {
             PhoneNumber::Create(

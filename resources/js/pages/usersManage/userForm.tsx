@@ -51,7 +51,7 @@ export default function AddUserForm({ onFormSubmit,roles, company }: AddUserForm
   };
   // console.log(company)
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4 h-[95%] p-2 overflow-x-auto">
       {/* Full Name */}
       <div>
         <input

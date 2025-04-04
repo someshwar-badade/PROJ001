@@ -17,7 +17,8 @@ export type User = {
   phone_numbers: { id: number; user_id: number; phone_number: string }[];
 }
 
-export const getColumns = (fetchUsers: () => void, message?: string): ColumnDef<User>[] => [
+export const getColumns = (fetchUsers: () => void, message?: string ,  allRoles: { id: number; name: string }[] = [],
+allCompanies: { id: number; name: string }[] = []): ColumnDef<User>[] => [
     {
       accessorKey: "id",
       header: () => <div className="text-center font-bold ">Id</div>,
@@ -91,18 +92,19 @@ export const getColumns = (fetchUsers: () => void, message?: string): ColumnDef<
                     </DialogTrigger>
                     <DialogPortal>
                       <DialogOverlay className="fixed inset-0 z-50 bg-black/10 backdrop-blur-sm" />
-                      <DialogContent className="fixed inset-0 z-50 mx-auto mt-4 flex h-[90vh] max-w-2xl flex-col items-center justify-center rounded-lg bg-white p-6 dark:bg-gray-900">
+                      <DialogContent className="fixed inset-0 z-99 mx-auto mt-4 flex h-[90vh] max-w-2xl flex-col items-center justify-center rounded-lg bg-white p-6 dark:bg-gray-900">
                         <DialogTitle className="mt-2 text-2xl font-bold">Edit User</DialogTitle>
                         <DialogDescription className="mt-2 text-gray-600 dark:text-gray-400">
                           Update user details below.
                         </DialogDescription>
   
-                        {/* Message */}
-                        {message && <p className="m-2 p-3 dark:bg-green-900">{message}</p>}
+                     
   
                         {/* User Form */}
-                        <div className="mt-2 w-full max-w-2xl">
-                          <EditUserForm onFormSubmit={fetchUsers} userId={dataUser.id} />
+                        <div className="mt-2 w-full max-w-2xl h-[80%]">
+                             {/* Message */}
+                        {message && <p className="m-2 p-3 dark:bg-green-900">{message}</p>}
+                          <EditUserForm onFormSubmit={fetchUsers} roles={allRoles} company={allCompanies} userId={dataUser.id} />
                         </div>
   
                         {/* Close Button */}

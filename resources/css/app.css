@@ -67,6 +67,7 @@
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
+
 @layer base {
     *,
     ::after,
@@ -75,7 +76,26 @@
     ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
     }
+
+    *::-webkit-scrollbar {
+        width: 4px;             /* Thin scrollbar */
+        height: 2px;            /* For horizontal scroll */
+      }
+      
+      *::-webkit-scrollbar-thumb {
+        background-color: #21253b; /* Grey thumb */
+        border-radius: 4px;
+      }
+      
+      *::-webkit-scrollbar-thumb:hover {
+        background-color: #666; /* Darker grey on hover */
+      }
+      
+      *::-webkit-scrollbar-track {
+        background: transparent; /* No background strip */
+      }
 }
+
 
 :root {
     --background: oklch(1 0 0);

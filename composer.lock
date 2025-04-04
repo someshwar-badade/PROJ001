@@ -3412,16 +3412,16 @@
         },
         {
             "name": "santigarcor/laratrust",
-            "version": "8.4.0",
+            "version": "8.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/santigarcor/laratrust.git",
-                "reference": "ca3f84b548c2432930203cdad88b1bdb5418f5e8"
+                "reference": "f0b90fca6b378906c3522f9f40ca1691c4a6fd84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/santigarcor/laratrust/zipball/ca3f84b548c2432930203cdad88b1bdb5418f5e8",
-                "reference": "ca3f84b548c2432930203cdad88b1bdb5418f5e8",
+                "url": "https://api.github.com/repos/santigarcor/laratrust/zipball/f0b90fca6b378906c3522f9f40ca1691c4a6fd84",
+                "reference": "f0b90fca6b378906c3522f9f40ca1691c4a6fd84",
                 "shasum": ""
             },
             "require": {
@@ -3475,7 +3475,7 @@
             ],
             "support": {
                 "issues": "https://github.com/santigarcor/laratrust/issues",
-                "source": "https://github.com/santigarcor/laratrust/tree/8.4.0"
+                "source": "https://github.com/santigarcor/laratrust/tree/8.4.1"
             },
             "funding": [
                 {
@@ -3483,7 +3483,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-24T15:56:59+00:00"
+            "time": "2025-03-31T14:02:58+00:00"
         },
         {
             "name": "symfony/clock",

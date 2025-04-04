@@ -12,6 +12,8 @@ export type User = {
   id: number,
   name: string,
   email: string,
+  roles: { id: number; user_id: number; display_name: string }[],
+  companies: { id: number; user_id: number; name: string }[],
   phone_numbers: { id: number; user_id: number; phone_number: string }[];
 }
 
@@ -47,6 +49,30 @@ export const getColumns = (fetchUsers: () => void, message?: string): ColumnDef<
           : "N/A";
   
         return <div className="text-center font-medium">{mobileData}</div>;
+      },
+    },
+    {
+      accessorKey: "company",
+      header: () => <div className="text-center font-bold">Company</div>,
+      cell: ({ row }) => {
+        const userCompanies = row.original.companies || [];
+        const companyData = userCompanies.length
+          ? userCompanies.map((m) => m.name).join(", ")
+          : "N/A";
+  
+        return <div className="text-center font-medium">{companyData}</div>;
+      },
+    },
+    {
+      accessorKey: "roles",
+      header: () => <div className="text-center font-bold">Assigned Roles</div>,
+      cell: ({ row }) => {
+        const userRoles = row.original.roles || [];
+        const rolesData = userRoles.length
+          ? userRoles.map((m) => m.display_name).join(", ")
+          : "N/A";
+  
+        return <div className="text-center font-medium">{rolesData}</div>;
       },
     },
     {

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
+use App\Models\Role;
+use App\Models\Company;
+
 use App\Models\PhoneNumber;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
@@ -16,19 +19,24 @@ class UserController extends Controller
 {
     public function users(Request $request)
     {    
-    //     $query = User::query();
-    //    $users = User::with('phoneNumbers')->paginate(10)->onEachSide(1);
-        // $users = User::with('phoneNumbers')->get();
-        $users = User::query()
-        ->select('id', 'name', 'email')
-        ->with('phoneNumbers') 
-        ->paginate(10)
-        ->withQueryString(); // Keeps the pagination query params
-    //    dd($users);
+        // Retrieve users with related data (phoneNumbers, roles, and companies)
+        $users = User::select('id', 'name', 'email')
+            ->with(['phoneNumbers', 'roles', 'companies'])
+            ->paginate(10)
+            ->withQueryString(); // Keeps pagination query parameters
+    
+        // Fetch roles and companies using Eloquent (instead of DB::table)
+        $roles = Role::all();
+        $companies = Company::all();
+    
+        // Return data to Inertia
         return Inertia::render('usersManage/users', [
             'users' => $users, 
+            'roles' => $roles,
+            'companies' => $companies, // Fixed naming for consistency
         ]);
     }
+    
 
     public function addUser(Request $request)
     {
@@ -49,6 +57,9 @@ class UserController extends Controller
             ],
             'mobile' => 'required|digits:10|unique:phone_numbers,phone_number',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role_id' => 'required|array|min:1', // Multiple roles required
+            'role_id.*' => 'exists:roles,id', // Each role must exist in roles table
+            'company_id' => 'required|exists:companies,id', // Company must exist
         ]);
 
         DB::transaction(function () use ($validated) {
@@ -62,6 +73,10 @@ class UserController extends Controller
                 'user_id' => $user->id,
                 'phone_number' => $validated['mobile'],
             ]);
+
+              // Attach roles in pivot table (user_roles)
+              $user->roles()->attach($validated['role_id']); 
+              $user->companies()->attach($validated['company_id']);
 
             event(new Registered($user));
         });

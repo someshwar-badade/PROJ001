@@ -50,6 +50,8 @@ export default function users() {
     const { props } = usePage(); //  Get Inertia page props
 
     const [message, setMessage] = useState('');
+    const [roles, setRoles] = useState<Array<{ id: number; name: string }>>([]);
+const [company, setCompany] = useState<Array<{ id: number; name: string }>>([]);
 
     const [users, setUsers] = useState<PaginatedUsers>({
         data: [],
@@ -86,11 +88,19 @@ export default function users() {
                 //               total: 0,
                 //           },
             });
+
+            if (Array.isArray(props.roles)) {
+              setRoles(props.roles);
+          }
+      
+          if (Array.isArray(props.companies)) {
+              setCompany(props.companies);
+          }
         }
-    }, [props.users]);
+    }, [props.users,props.roles, props.companies]);
 
     function getData(): User[] {
-        console.log(users.data)
+        // console.log(roles)
         return users.data;
     }
 
@@ -123,7 +133,7 @@ export default function users() {
                                     {/* User Form */}
                                     <div className="mt-2 w-full max-w-2xl">
                                         {message ? <p className="m-2 p-3 dark:bg-green-900">{message}</p> : ''}
-                                        <AddUserForm onFormSubmit={fetchUsers} />
+                                        <AddUserForm onFormSubmit={fetchUsers} roles={roles} company={company} />
                                     </div>
 
                                     {/* Close Button */}
